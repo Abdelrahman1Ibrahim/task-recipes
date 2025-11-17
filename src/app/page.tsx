@@ -1,32 +1,38 @@
 import FiltrationList from "@/components/FilterationList";
+import fetchApi from "@/lib/api/fetcher";
+import { Suspense } from "react";
+// export const dynamic = "force-dynamic";
 
-export async function fetchRecipes() {
-  try {
-    const response = await fetch(
-      "https://www.themealdb.com/api/json/v1/1/filter.php?a=Canadian",
-      {
-        cache: "no-store"
-      }
-    );
-    console.log(response);
-
-    const data = await response.json();
-    console.log(data);
-
-    return data;
-  } catch (error) {
-    console.error("Error fetching recipes:", error);
-
-    return null;
-  }
+interface HomeProps {
+  searchParams: Promise<{
+    s?: string;
+    a?: string;
+  }>;
 }
 
-export default async function Home() {
-  const data = await fetchRecipes();
+export default async function Home(props: HomeProps) {
+  const params = await props.searchParams;
 
+  const searchQuery = params.s || "";
+  const filterQuery = params.a || "";
+  const url = searchQuery
+    ? `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchQuery}`
+    : `https://www.themealdb.com/api/json/v1/1/filter.php?a=${
+        filterQuery || "Canadian"
+      }`;
+
+  const data = await fetchApi({ url });
+
+  const meals = JSON.parse(JSON.stringify(data?.meals || []));
   return (
     <>
-      <FiltrationList initialData={data?.meals} />
+      <Suspense fallback={<LoadingComponent />}>
+        <FiltrationList initialData={meals} />
+      </Suspense>
     </>
   );
+}
+
+function LoadingComponent() {
+  return <p>Loading list...</p>;
 }
