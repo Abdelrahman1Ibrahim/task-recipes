@@ -1,4 +1,5 @@
-import FiltrationList from "@/components/FilterationList";
+import Recipes from "@/components/Recipes";
+
 import fetchApi from "@/lib/api/fetcher";
 import { Suspense } from "react";
 // export const dynamic = "force-dynamic";
@@ -27,7 +28,7 @@ export default async function Home(props: HomeProps) {
   return (
     <>
       <Suspense fallback={<LoadingComponent />}>
-        <FiltrationList initialData={meals} />
+        <Recipes initialData={meals} />
       </Suspense>
     </>
   );
