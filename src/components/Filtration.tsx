@@ -11,6 +11,13 @@ import { DialogClose, DialogTitle } from "@radix-ui/react-dialog";
 import { useForm, Controller, ControllerRenderProps } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+
 const FiltrationOptions = [
   "Canadian",
   "Chinese",
@@ -34,7 +41,7 @@ export default function Filtration() {
 
   const searchParams = useSearchParams();
 
-  console.log(searchParams);
+  // console.log(searchParams);
 
   const search = searchParams.get("a") || "Canadian";
   const existOption = FiltrationOptions.includes(
@@ -113,12 +120,6 @@ export default function Filtration() {
   );
 }
 
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useState } from "react";
 interface RadioGroupFiltrationProps {
   field: ControllerRenderProps<filtrationValue, "filterOption">;
 }

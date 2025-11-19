@@ -2,6 +2,7 @@ import Image from "next/image";
 import foodImage from "../../public/images/food.webp";
 import SearchRecipes from "./Search";
 import Filtration from "./Filtration";
+import { Suspense } from "react";
 
 export default function Header() {
   return (
@@ -17,9 +18,13 @@ export default function Header() {
             </p>
           </div>
           <div className="flex gap-4 mt-5 md:mt-14">
-            <SearchRecipes />
+            <Suspense fallback={<div>Loading...</div>}>
+              <SearchRecipes />
+            </Suspense>
 
-            <Filtration />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Filtration />
+            </Suspense>
           </div>
         </div>
         <div className="relative w-full hidden md:block">
