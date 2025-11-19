@@ -38,6 +38,10 @@ export default function SearchRecipes() {
       params.delete("s");
     }
 
+    if (params.has("a")) {
+      params.delete("a");
+    }
+
     startTransition(() => {
       router.push(`/?${params.toString()}`);
     });

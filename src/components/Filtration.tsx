@@ -61,6 +61,9 @@ export default function Filtration() {
 
   function onSubmit(data: filtrationValue) {
     const params = new URLSearchParams(searchParams.toString());
+    if (params.has("s")) {
+      params.delete("s");
+    }
     params.set("a", data.filterOption);
 
     router.push(`/?${params.toString()}`);
