@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ImageWithFallback } from "./ImageWithFallback";
+import LoadingRecipes from "./LoadingRecipes";
 
 interface FiltrationListProps {
   initialData: recipe[];
@@ -33,7 +34,7 @@ export default function Recipes({ initialData }: FiltrationListProps) {
     initialData: initialData
   });
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <LoadingRecipes />;
   if (isError) return <p>Error loading data.</p>;
 
   return (
@@ -74,6 +75,9 @@ export default function Recipes({ initialData }: FiltrationListProps) {
             </div>
           </li>
         ))}
+      {recipesQuery.length === 0 && (
+        <p className="text-center">No recipes found.</p>
+      )}
     </ul>
   );
 }

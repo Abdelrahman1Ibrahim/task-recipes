@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
+
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 
 import Providers from "@/components/Providers";
 
-const geistSans = Geist({
+const geistSans = Roboto({
   variable: "--font-geist-sans",
   subsets: ["latin"]
 });

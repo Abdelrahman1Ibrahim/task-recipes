@@ -27,17 +27,30 @@ export default async function RecipeDetails({
     url: `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
   });
 
+  if (!data) {
+    return (
+      <section className="container py-10 text-center">
+        <h1 className="text-4xl font-bold text-red-600">No Recipe Found</h1>
+        <p className="mt-2 text-gray-500">
+          Please try again with a different ID
+        </p>
+      </section>
+    );
+  }
+
   const recipe = data?.meals[0] || [];
 
   return (
-    <section className="container pb-[30px] px-5 py-1">
-      <Link
-        href="/"
-        className="px-4 py-2  border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 rounded-md"
-      >
-        Home
-      </Link>
-      <div className=" flex flex-col md:flex-row gap-5 justify-between mt-[20px] ">
+    <section className="container pb-[30px] px-5">
+      <div className="flex justify-end mb-2">
+        <Link
+          href="/"
+          className="px-4 py-2   border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 rounded-md"
+        >
+          Home
+        </Link>
+      </div>
+      <div className=" flex flex-col md:flex-row gap-5 justify-between ">
         <div>
           <h2 className="font-extrabold text-[40px] leading-12">
             {recipe.strMeal}

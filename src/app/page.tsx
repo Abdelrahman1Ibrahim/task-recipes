@@ -1,3 +1,4 @@
+import LoadingRecipes from "@/components/LoadingRecipes";
 import Recipes from "@/components/Recipes";
 
 import fetchApi from "@/lib/api/fetcher";
@@ -27,13 +28,9 @@ export default async function Home(props: HomeProps) {
   const meals = JSON.parse(JSON.stringify(data?.meals || []));
   return (
     <>
-      <Suspense fallback={<LoadingComponent />}>
+      <Suspense fallback={<LoadingRecipes />}>
         <Recipes initialData={meals} />
       </Suspense>
     </>
   );
-}
-
-function LoadingComponent() {
-  return <p>Loading list...</p>;
 }
