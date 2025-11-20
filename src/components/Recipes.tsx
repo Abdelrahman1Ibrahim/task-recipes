@@ -1,13 +1,14 @@
 "use client";
 
 import { recipe } from "@/app/types";
-import fetchApi from "@/lib/api/fetcher";
-import { useQuery } from "@tanstack/react-query";
 
-import Link from "next/link";
+import fetchApi from "@/lib/api/fetcher";
+
+import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { ImageWithFallback } from "./ImageWithFallback";
 import LoadingRecipes from "./LoadingRecipes";
+import Link from "next/link";
+import { ImageWithFallback } from "./ImageWithFallback";
 
 interface FiltrationListProps {
   initialData: recipe[];
@@ -41,16 +42,21 @@ export default function Recipes({ initialData }: FiltrationListProps) {
 
   return (
     <>
-      <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-5 justify-center pb-[30px]">
+      <ul className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 sm:p-5 container mx-auto  pb-[30px] px-4">
         {recipesQuery &&
           recipesQuery.length > 0 &&
           recipesQuery.slice(0, 8).map((recipe: recipe) => (
             <li
               key={recipe.idMeal}
-              className="h-96 w-[348px] overflow-hidden mx-auto border rounded-xl shadow-[0_1px_3px_0_#00000033]"
+              className="
+              h-96
+                overflow-hidden 
+                border rounded-xl 
+                shadow-[0_1px_3px_0_#00000033]
+              "
             >
               <Link
-                className="w-[348px] max-w-full"
+                className="w-full h-full block"
                 href={`/recipes/${recipe.idMeal}`}
               >
                 <ImageWithFallback
@@ -58,24 +64,18 @@ export default function Recipes({ initialData }: FiltrationListProps) {
                   alt={recipe.strMeal}
                   width={348}
                   height={196}
-                  className="w-full h-[196px] border transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
+                  className="w-full h-[196px] object-cover transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
                 />
-                {/* <Image
-                src={recipe.strMealThumb}
-                alt={recipe.strMeal}
-                width={348}
-                height={196}
-                className="w-full h-[196px] border transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
-              /> */}
+
+                <div className="mx-6 mt-6">
+                  <h3 className="font-extrabold text-[24px] text-(--base0)">
+                    {recipe.strMeal}
+                  </h3>
+                  <p className="font-normal text-4 text-(--base0)">
+                    Such a simple, yet great recipe.
+                  </p>
+                </div>
               </Link>
-              <div className="mx-6 mt-6">
-                <h3 className="font-extrabold text-[24px] text-(--base0)">
-                  {recipe.strMeal}
-                </h3>
-                <p className="font-normal text-4 text-(--base0)">
-                  Such a simple, yet great recipe.
-                </p>
-              </div>
             </li>
           ))}
       </ul>
