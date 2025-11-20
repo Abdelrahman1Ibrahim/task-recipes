@@ -24,7 +24,10 @@ export default async function RecipeDetails({
   }
 
   const data = await fetchApi({
-    url: `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+    url: `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
+    option: {
+      next: { revalidate: 3600 }
+    }
   });
 
   if (!data) {
