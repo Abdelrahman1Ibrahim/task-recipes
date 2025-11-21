@@ -1,10 +1,11 @@
 import Image from "next/image";
 import foodImage from "../../public/images/food.webp";
-import SearchRecipes from "./Search";
-import Filtration from "./Filtration";
-import { Suspense } from "react";
 
-export default function Header() {
+import { Suspense } from "react";
+import { SearchRecipes } from "./Search";
+import { Filtration } from "./Filtration";
+
+export function Header() {
   return (
     <header
       className="

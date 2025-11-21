@@ -3,7 +3,10 @@ interface FetchApiOptions {
   option?: RequestInit;
 }
 
-export default async function fetchApi({ url, option = {} }: FetchApiOptions) {
+export async function fetchApi<T = unknown>({
+  url,
+  option = {}
+}: FetchApiOptions) {
   try {
     const response = await fetch(url, option);
 
@@ -13,7 +16,7 @@ export default async function fetchApi({ url, option = {} }: FetchApiOptions) {
       );
     }
 
-    const data = await response.json();
+    const data: T = await response.json();
     return data;
   } catch (error) {
     console.error(` [Server Fetch] Failed for URL: ${url}`);

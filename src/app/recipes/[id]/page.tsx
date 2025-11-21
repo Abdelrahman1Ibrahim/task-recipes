@@ -1,18 +1,12 @@
 import { ImageWithFallback } from "@/components/ImageWithFallback";
-import fetchApi from "@/lib/api/fetcher";
+import { fetchApi } from "@/lib/api/fetcher";
+import { Meal } from "@/types/recipes";
+import {
+  extractIngredients,
+  extractInstructions
+} from "@/utils/meal-transformers";
 import Link from "next/link";
-
-interface Meal {
-  idMeal: string;
-  strMeal: string;
-  strCategory: string;
-  strArea: string;
-  strInstructions: string;
-  strMealThumb: string;
-  strTags: string | null;
-  strYoutube: string | null;
-  [key: string]: string | null | undefined;
-}
+import { notFound } from "next/navigation";
 
 interface MealResponse {
   meals: Meal[] | null;
@@ -22,49 +16,20 @@ interface RecipeDetailsProps {
   params: Promise<{ id: string }>;
 }
 
-const extractIngredients = (recipe: Meal): string[] => {
-  const ingredientsList: string[] = [];
-  for (let i = 1; i <= 20; i++) {
-    const ingredient = recipe[`strIngredient${i}`];
-    const measure = recipe[`strMeasure${i}`];
-
-    if (ingredient && typeof ingredient === "string" && ingredient.trim()) {
-      const content = `${
-        measure && typeof measure === "string" && measure.trim() !== ""
-          ? `${measure.trim()} `
-          : ""
-      }${ingredient.trim()}`;
-      ingredientsList.push(content);
-    }
-  }
-  return ingredientsList;
-};
-
-const extractInstructions = (recipe: Meal): string[] => {
-  return recipe.strInstructions
-    ? recipe.strInstructions.split("\r\n").filter((step) => step.trim() !== "")
-    : [];
-};
-
 export default async function RecipeDetails({ params }: RecipeDetailsProps) {
   const id = (await params).id;
 
-  const data: MealResponse | null = await fetchApi({
+  const data = await fetchApi<MealResponse>({
     url: `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
     option: {
       next: { revalidate: 3600 }
     }
   });
 
+  console.log(data);
+
   if (!data || !data.meals || data.meals.length === 0) {
-    return (
-      <section className="container py-10 text-center">
-        <h1 className="text-4xl font-bold text-red-600">No Recipe Found</h1>
-        <p className="mt-2 text-gray-500">
-          Please try again with a different ID
-        </p>
-      </section>
-    );
+    notFound();
   }
 
   const recipe: Meal = data.meals[0];

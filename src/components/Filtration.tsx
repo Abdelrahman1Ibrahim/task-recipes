@@ -36,7 +36,7 @@ const formSchema = z.object({
 });
 
 type filtrationValue = z.infer<typeof formSchema>;
-export default function Filtration() {
+export function Filtration() {
   const router = useRouter();
 
   const searchParams = useSearchParams();

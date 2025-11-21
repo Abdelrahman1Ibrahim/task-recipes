@@ -15,7 +15,7 @@ const formSchema = z.object({
 
 type SearchFormInputs = z.infer<typeof formSchema>;
 
-export default function SearchRecipes() {
+export function SearchRecipes() {
   const router = useRouter();
   const searchParams = useSearchParams();
 

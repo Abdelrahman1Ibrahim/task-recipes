@@ -1,4 +1,5 @@
 "use client";
+import { validateSrcImage } from "@/utils/validation";
 import Image, { ImageProps } from "next/image";
 import { useState } from "react";
 
@@ -17,34 +18,29 @@ export function ImageWithFallback(props: CustomImageProps) {
   const handleError = () => {
     setDidError(true);
   };
-  let isValidUrl = true;
-  if (src) {
-    try {
-      new URL(src);
-    } catch {
-      isValidUrl = false;
-    }
+  const isValidUrl = validateSrcImage(src);
+
+  if (didError || !src || !isValidUrl) {
+    return (
+      <div
+        className={`inline-block bg-gray-100 text-center align-middle ${
+          className ?? ""
+        }`}
+        style={style}
+      >
+        <div className="flex items-center justify-center w-full h-full">
+          <Image
+            src={ERROR_IMG_SRC}
+            width={88}
+            height={88}
+            alt="Error loading image "
+          />
+        </div>
+      </div>
+    );
   }
 
-  console.log(isValidUrl, didError);
-
-  return didError || !src || !isValidUrl ? (
-    <div
-      className={`inline-block bg-gray-100 text-center align-middle ${
-        className ?? ""
-      }`}
-      style={style}
-    >
-      <div className="flex items-center justify-center w-full h-full">
-        <Image
-          src={ERROR_IMG_SRC}
-          width={88}
-          height={88}
-          alt="Error loading image يسس"
-        />
-      </div>
-    </div>
-  ) : (
+  return (
     <Image
       src={src}
       alt={alt}

@@ -1,8 +1,7 @@
-import LoadingRecipes from "@/components/LoadingRecipes";
-import Recipes from "@/components/Recipes";
-
-import fetchApi from "@/lib/api/fetcher";
-import { Suspense } from "react";
+import { Recipes } from "@/components/Recipes";
+import { fetchApi } from "@/lib/api/fetcher";
+import { buildApiUrl } from "@/lib/api/url";
+import { MealApiResponse } from "@/types/recipes";
 // export const dynamic = "force-dynamic";
 
 interface HomeProps {
@@ -14,23 +13,14 @@ interface HomeProps {
 
 export default async function Home(props: HomeProps) {
   const params = await props.searchParams;
+  const { url } = buildApiUrl({ params });
+  const data = await fetchApi<MealApiResponse>({
+    url
+  });
 
-  const searchQuery = params.s || "";
-  const filterQuery = params.a || "";
-  const url = searchQuery
-    ? `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchQuery}`
-    : `https://www.themealdb.com/api/json/v1/1/filter.php?a=${
-        filterQuery || "Canadian"
-      }`;
-
-  const data = await fetchApi({ url });
-
-  const meals = JSON.parse(JSON.stringify(data?.meals || []));
   return (
     <>
-      <Suspense fallback={<LoadingRecipes />}>
-        <Recipes initialData={meals} />
-      </Suspense>
+      <Recipes initialData={data || { meals: [] }} />
     </>
   );
 }
